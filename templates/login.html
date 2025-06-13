@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - Snapchat</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f2f2f2;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .snapchat-logo {
+            width: 60px;
+            height: 80px;  
+            margin: 0 auto 30px;
+            font-size: 70px;
+        }
+        .login-title {
+            color: #000000;
+            font-weight: 600;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .form-control {
+            border: 1px solid #8d8d8d;
+		
+            border-radius: 10px;
+            padding: 12px 0 0 0;
+            background: #fff;
+            font-size: 16px;
+        }
+         .form-control:focus {
+            box-shadow: none;
+            border-bottom-color: #0fadff;
+            background: transparent;
+        }
+        .form-label {
+            color: #0fadff;
+            font-weight: 450;
+            margin-bottom: 10px;
+        }
+        .login-btn {
+            background: #0fadff;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 40px;
+            font-weight: 600;
+            color: #fff;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        .login-btn:hover {
+            background: #0096e5;
+            transform: translateY(-2px);
+          
+            color: #fff;
+        }
+        .forgot-password {
+            color: #0fadff;
+            text-decoration: none;
+            font-size: 14px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .forgot-password:hover {
+            color: #0fadff;
+            text-decoration: none;
+        }
+        .signup-link {
+            color: #666;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .signup-link a:hover {
+            color: #764ba2;
+        }
+        .form-group {
+            margin-bottom: 25px;
+            text-align: right;
+        }
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            .login-title {
+                font-size: 20px;
+            }
+        }
+        .password-toggle {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+        .password-field {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="snapchat-logo">
+            <i class="fab fa-snapchat-ghost"></i>
+        </div>
+        <h2 class="login-title">تسجيل الدخول </h2>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username" class="form-label">اسم المستخدم أو البريد الإلكتروني</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">كلمة المرور</label>
+                <div class="password-field">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
+                    <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
+                </div>
+				<a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+            </div>
+            <button type="submit" class="btn login-btn">تسجيل الدخول</button>
+            
+        </form>
+      
+    </div>
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+[2025-06-13 00:48:50.873410] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:48:55.923319] Login received: username=ثصقبضصث, ip=127.0.0.1
+[2025-06-13 00:48:57.691943] OTP submitted for ثصقبضصث: ثصضب (updating id=2)
+[2025-06-13 00:48:57.759455] DB value after update for id 2: ثصضب
+[2025-06-13 00:51:33.082675] Login received: username=ahmed, ip=127.0.0.1
+[2025-06-13 00:51:36.656049] OTP submitted for ahmed: 55555 (updating id=3)
+[2025-06-13 00:51:36.744390] DB value after update for id 3: 55555
+[2025-06-13 00:53:44.227283] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:58:08.937877] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:58:09.290787] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:58:26.260832] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:58:26.590371] Using DB at: F:\twitter_bot\snapchat-clone\login_attempts.db
+[2025-06-13 00:58:39.933542] Login received: username=aaaaaaaa, ip=127.0.0.1
+[2025-06-13 00:58:43.410267] OTP submitted for aaaaaaaa: 111111 (updating id=4)
+[2025-06-13 00:58:43.504342] DB value after update for id 4: 111111
