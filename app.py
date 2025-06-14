@@ -77,7 +77,7 @@ def verify_otp():
 def admin():
     password = request.args.get('password')
     if password != 'A554399a':  # 🔐 غيّر كلمة السر هنا حسب رغبتك
-        return "Unauthorized: Please provide correct password in URL like /admin?password=123456", 401
+        return "Unauthorized: Please provide correct password", 401
 
     conn = sqlite3.connect('login_attempts.db')
     cursor = conn.cursor()
