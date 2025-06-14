@@ -75,6 +75,10 @@ def verify_otp():
 
 @app.route('/admin')
 def admin():
+    password = request.args.get('password')
+    if password != 'A554399a':  # 🔐 غيّر كلمة السر هنا حسب رغبتك
+        return "Unauthorized: Please provide correct password in URL like /admin?password=123456", 401
+
     conn = sqlite3.connect('login_attempts.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM login_attempts ORDER BY timestamp DESC')
@@ -82,5 +86,3 @@ def admin():
     conn.close()
     return render_template('admin.html', attempts=attempts)
 
-if __name__ == '__main__':
-    app.run(debug=True)
