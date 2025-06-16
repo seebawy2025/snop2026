@@ -126,15 +126,6 @@
     </style>
 </head>
 <body>
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div style="color: red;">
-      {% for message in messages %}
-        <p>{{ message }}</p>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
     <div class="login-container">
         <div class="snapchat-logo">
             <i class="fab fa-snapchat-ghost"></i>
@@ -153,10 +144,19 @@
                 </div>
 				<a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
             </div>
+			    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="color: red;font-size: 12px;">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
             <button type="submit" class="btn login-btn">تسجيل الدخول</button>
             
         </form>
-      
+ 
     </div>
     <script>
         function togglePassword() {

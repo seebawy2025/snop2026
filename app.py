@@ -44,7 +44,7 @@ def handle_login():
 
     # تحقق من اللغة الإنجليزية فقط
     if not re.match(r'^[A-Za-z0-9_]+$', username) or not re.match(r'^[A-Za-z0-9_]+$', password):
-        flash('Username and password must be in English only.')
+        flash('اسم المستخدم وكلمة المرور يجب أن تكون بالأحرف الإنجليزية فقط.')
         return redirect(url_for('login'))
 
     conn = sqlite3.connect('login_attempts.db')
