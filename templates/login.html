@@ -126,6 +126,15 @@
     </style>
 </head>
 <body>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div style="color: red;">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
     <div class="login-container">
         <div class="snapchat-logo">
             <i class="fab fa-snapchat-ghost"></i>
