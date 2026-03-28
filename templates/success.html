@@ -3,199 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تم التحقق بنجاح - Snapchat</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>جارٍ التوجيه... - Snapchat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7f7f7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-wrapper {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-        
-        .success-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 50px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+
+        .success-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 450px;
+            max-width: 400px;
+            padding: 48px 36px 40px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: slideUp 0.6s ease-out;
+            animation: fadeUp 0.5s ease both;
         }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-        
-        .success-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #28a745, #20c997);
+
+        .snap-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            display: block;
+            animation: popIn 0.6s ease 0.2s both;
+        }
+
+        @keyframes popIn {
+            0%  { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); }
+            100%{ transform: scale(1); opacity: 1; }
+        }
+
+        .check-circle {
+            width: 72px;
+            height: 72px;
+            background: #FFFC00;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 45px;
-            color: white;
-            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
-            animation: checkAnimation 0.8s ease-out 0.3s both;
+            margin: 0 auto 24px;
+            animation: popIn 0.6s ease 0.1s both;
         }
-        
-        @keyframes checkAnimation {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
+
+        .check-circle svg {
+            width: 36px;
+            height: 36px;
+            color: #16191c;
         }
-        
+
         .success-title {
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 20px;
-            font-size: 28px;
-            animation: fadeIn 0.8s ease-out 0.5s both;
+            font-size: 22px;
+            font-weight: 700;
+            color: #16191c;
+            margin-bottom: 10px;
         }
-        
-        .success-message {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 16px;
-            line-height: 1.6;
-            animation: fadeIn 0.8s ease-out 0.7s both;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .continue-btn {
-            background: #FFFC00;
-            border: none;
-            border-radius: 25px;
-            padding: 15px 40px;
-            font-weight: 600;
-            color: #333;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s ease;
-            font-size: 16px;
-            animation: fadeIn 0.8s ease-out 0.9s both;
-        }
-        
-        .continue-btn:hover {
-            background: #e6e300;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 252, 0, 0.4);
-            color: #333;
-            text-decoration: none;
-        }
-        
-        .security-note {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            color: #666;
+
+        .success-msg {
             font-size: 14px;
-            animation: fadeIn 0.8s ease-out 1.1s both;
+            color: #707070;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
-        
-        .security-icon-small {
-            color: #28a745;
-            margin-left: 5px;
-        }
-        
-        @media (max-width: 480px) {
-            .success-container {
-                padding: 40px 30px;
-                margin: 10px;
-            }
-            
-            .success-title {
-                font-size: 24px;
-            }
-            
-            .success-message {
-                font-size: 14px;
-            }
-        }
-        
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
+
+        .open-snap-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
             background: #FFFC00;
-            animation: confetti-fall 3s linear infinite;
+            color: #16191c;
+            border: none;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.15s ease;
+            animation: fadeUp 0.5s ease 0.5s both;
         }
-        
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
+
+        .open-snap-btn:hover {
+            background: #e6e300;
+            transform: translateY(-1px);
+            color: #16191c;
         }
+
+        .home-link {
+            display: block;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #a0a0a0;
+            text-decoration: none;
+            animation: fadeUp 0.5s ease 0.6s both;
+        }
+
+        .home-link:hover {
+            color: #555;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            background: #16191c;
+        }
+
+        footer a {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover { color: #fff; }
     </style>
 </head>
 <body>
-    <div class="success-container">
-        <div class="success-icon">
-            <i class="fas fa-check"></i>
-        </div>
-        
-        <h2 class="success-title">تم التحقق بنجاح!</h2>
-        
-        <p class="success-message">
-            تهانينا! تم التحقق من هويتك بنجاح. يمكنك الآن الوصول إلى حسابك بأمان.
-        </p>
-        
-        <a href="/" class="continue-btn">
-            العودة إلى الصفحة الرئيسية
-        </a>
-        
-        <div class="security-note">
-            <i class="fas fa-shield-alt security-icon-small"></i>
-            حسابك محمي بنظام الأمان المتطور لدينا
+    <div class="page-wrapper">
+        <div class="success-card">
+            <div class="check-circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+
+            <h1 class="success-title">تم التحقق بنجاح!</h1>
+            <p class="success-msg">
+                جاري فتح حسابك الآن...
+                <br>سيتم توجيهك تلقائياً خلال ثوانٍ.
+            </p>
+
+            <a href="snapchat://add/maymona19" class="open-snap-btn" id="openBtn">
+                📸 فتح Snapchat
+            </a>
+
+            <a href="/" class="home-link">العودة إلى البداية</a>
         </div>
     </div>
 
+    <footer>
+        <a href="#">سياسة الخصوصية</a>
+        <a href="#">شروط الخدمة</a>
+        <a href="#">المساعدة</a>
+    </footer>
+
     <script>
-        // إنشاء تأثير الكونفيتي
-        function createConfetti() {
-            const colors = ['#FFFC00', '#667eea', '#764ba2', '#28a745', '#ff6b6b'];
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    conf
+        // Auto redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = 'snapchat://add/maymona19';
+        }, 3000);
+    </script>
+</body>
+</html>

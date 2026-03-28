@@ -4,174 +4,391 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول - Snapchat</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #f2f2f2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7f7f7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-wrapper {
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
+
+        .login-card {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 400px;
+            padding: 40px 36px 36px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .snapchat-logo {
-            width: 60px;
-            height: 80px;  
-            margin: 0 auto 30px;
-            font-size: 70px;
+
+        /* Snapchat Ghost SVG Logo */
+        .snap-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 20px;
+            display: block;
         }
+
         .login-title {
-            color: #000000;
-            font-weight: 600;
-            margin-bottom: 30px;
-            font-size: 24px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #16191c;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
         }
-        .form-control {
-            border: 1px solid #8d8d8d;
-		
-            border-radius: 10px;
-            padding: 12px 0 0 0;
-            background: #fff;
-            font-size: 16px;
-        }
-         .form-control:focus {
-            box-shadow: none;
-            border-bottom-color: #0fadff;
-            background: transparent;
-        }
-        .form-label {
-            color: #0fadff;
-            font-weight: 450;
-            margin-bottom: 10px;
-        }
-        .login-btn {
-            background: #0fadff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 40px;
-            font-weight: 600;
-            color: #fff;
-            width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            font-size: 16px;
-        }
-        .login-btn:hover {
-            background: #0096e5;
-            transform: translateY(-2px);
-          
-            color: #fff;
-        }
-        .forgot-password {
-            color: #0fadff;
-            text-decoration: none;
+
+        .login-subtitle {
             font-size: 14px;
-            margin-top: 15px;
-            display: inline-block;
+            color: #707070;
+            margin-bottom: 28px;
+            line-height: 1.5;
         }
-        .forgot-password:hover {
-            color: #0fadff;
-            text-decoration: none;
-        }
-        .signup-link {
-            color: #666;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-        .signup-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .signup-link a:hover {
-            color: #764ba2;
-        }
+
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 16px;
             text-align: right;
         }
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-            .login-title {
-                font-size: 20px;
-            }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #16191c;
+            margin-bottom: 6px;
         }
-        .password-toggle {
+
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: #16191c;
+            background: #fafafa;
+            outline: none;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            direction: ltr;
+        }
+
+        .form-control:focus {
+            border-color: #0096FF;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 150, 255, 0.08);
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper .form-control {
+            padding-left: 44px;
+        }
+
+        .eye-toggle {
             position: absolute;
-            left: 10px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #666;
+            color: #a0a0a0;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
         }
-        .password-field {
-            position: relative;
+
+        .eye-toggle:hover {
+            color: #555;
+        }
+
+        .eye-toggle svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            color: #0096FF;
+            text-decoration: none;
+            margin-top: 6px;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #0070cc;
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            background: #fff0f0;
+            border: 1px solid #ffcdd2;
+            border-radius: 10px;
+            color: #d32f2f;
+            font-size: 13px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+            text-align: right;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #0096FF;
+            color: #ffffff;
+            border: none;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s ease, transform 0.15s ease;
+            letter-spacing: 0.2px;
+        }
+
+        .login-btn:hover {
+            background: #007ad9;
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #e8e8e8;
+        }
+
+        .divider-text {
+            font-size: 13px;
+            color: #a0a0a0;
+        }
+
+        .phone-btn {
+            width: 100%;
+            padding: 13px;
+            background: transparent;
+            color: #0096FF;
+            border: 1.5px solid #0096FF;
+            border-radius: 100px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .phone-btn:hover {
+            background: rgba(0, 150, 255, 0.06);
+        }
+
+        .signup-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #707070;
+        }
+
+        .signup-section a {
+            color: #0096FF;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .signup-section a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 16px;
+            background: #16191c;
+        }
+
+        footer a {
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 32px 24px 28px;
+                border-radius: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="snapchat-logo">
-            <i class="fab fa-snapchat-ghost"></i>
-        </div>
-        <h2 class="login-title">تسجيل الدخول </h2>
-        <form method="POST" action="/login">
-            <div class="form-group">
-                <label for="username" class="form-label">اسم المستخدم أو البريد الإلكتروني</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="" required>
-            </div>
-            <div class="form-group">
-                <label for="password" class="form-label">كلمة المرور</label>
-                <div class="password-field">
-                    <input type="password" class="form-control" id="password" name="password" placeholder="" required>
-                    <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
+    <div class="page-wrapper">
+        <div class="login-card">
+            <!-- Snapchat Ghost SVG -->
+            <svg class="snap-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#FFFC00" stroke="#16191c" stroke-width="3.5" d="
+                    M50 12
+                    C32 12 20 24 20 40
+                    C20 50 24 57 24 57
+                    L16 62
+                    C14 63 14 66 16 67
+                    L22 69
+                    C22 69 21 72 18 74
+                    C16 75 14 77 18 78
+                    C24 79 28 76 32 74
+                    C34 73 35 74 36 75
+                    C38 77 43 80 50 80
+                    C57 80 62 77 64 75
+                    C65 74 66 73 68 74
+                    C72 76 76 79 82 78
+                    C86 77 84 75 82 74
+                    C79 72 78 69 78 69
+                    L84 67
+                    C86 66 86 63 84 62
+                    L76 57
+                    C76 57 80 50 80 40
+                    C80 24 68 12 50 12Z
+                "/>
+            </svg>
+
+            <h1 class="login-title">سجّل الدخول إلى Snapchat</h1>
+            <p class="login-subtitle">تواصل مع أصدقائك عبر الرسائل والمقاطع</p>
+
+            <form method="POST" action="/login" id="loginForm">
+                <div class="form-group">
+                    <label for="username" class="form-label">اسم المستخدم أو البريد الإلكتروني</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        name="username"
+                        placeholder="أدخل اسم المستخدم"
+                        required
+                        autocomplete="username"
+                    >
                 </div>
-				<a href="#" class="forgot-password">هل نسيت كلمة المرور؟</a>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">كلمة المرور</label>
+                    <div class="password-wrapper">
+                        <input
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            placeholder="أدخل كلمة المرور"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="eye-toggle" onclick="togglePassword()" id="eyeBtn" aria-label="إظهار/إخفاء كلمة المرور">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
+                </div>
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="error-msg">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                <button type="submit" class="login-btn" id="loginBtn">تسجيل الدخول</button>
+            </form>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">أو</span>
+                <div class="divider-line"></div>
             </div>
-			    {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <div style="color: red;font-size: 12px;">
-      {% for message in messages %}
-        <p>{{ message }}</p>
-      {% endfor %}
+
+            <button class="phone-btn" onclick="return false;">
+                الدخول برقم الهاتف
+            </button>
+
+            <div class="signup-section">
+                مستخدم جديد؟ <a href="#">أنشئ حسابك</a>
+            </div>
+        </div>
     </div>
-  {% endif %}
-{% endwith %}
-            <button type="submit" class="btn login-btn">تسجيل الدخول</button>
-            
-        </form>
- 
-    </div>
+
+    <footer>
+        <a href="#">سياسة الخصوصية</a>
+        <a href="#">شروط الخدمة</a>
+        <a href="#">المساعدة</a>
+    </footer>
+
     <script>
+        let passwordVisible = false;
         function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.password-toggle');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
+            const pwd = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            passwordVisible = !passwordVisible;
+            pwd.type = passwordVisible ? 'text' : 'password';
+            if (passwordVisible) {
+                icon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>`;
             } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                icon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>`;
             }
         }
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            const btn = document.getElementById('loginBtn');
+            btn.textContent = 'جاري التحقق...';
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+        });
     </script>
 </body>
 </html>
