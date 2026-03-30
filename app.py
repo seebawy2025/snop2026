@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import psycopg2
+import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
 import os
