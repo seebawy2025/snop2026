@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جارٍ التوجيه... - Snapchat</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
             background: #f7f7f7;
@@ -27,7 +32,7 @@
         .success-card {
             background: #fff;
             border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 400px;
             padding: 48px 36px 40px;
@@ -36,8 +41,15 @@
         }
 
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .snap-logo {
@@ -49,9 +61,19 @@
         }
 
         @keyframes popIn {
-            0%  { transform: scale(0); opacity: 0; }
-            70% { transform: scale(1.1); }
-            100%{ transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .check-circle {
@@ -129,27 +151,30 @@
         }
 
         footer a {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 12px;
             text-decoration: none;
             margin: 0 10px;
         }
 
-        footer a:hover { color: #fff; }
+        footer a:hover {
+            color: #fff;
+        }
     </style>
 </head>
+
 <body>
     <div class="page-wrapper">
         <div class="success-card">
             <div class="check-circle">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"/>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12" />
                 </svg>
             </div>
 
             <h1 class="success-title">تم التحقق بنجاح!</h1>
             <p class="success-msg">
-                جاري فتح حسابك الآن...
                 <br>سيتم توجيهك تلقائياً خلال ثوانٍ.
             </p>
 
@@ -174,4 +199,5 @@
         }, 3000);
     </script>
 </body>
+
 </html>
