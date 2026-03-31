@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import psycopg2
+import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
 import os
@@ -16,12 +16,12 @@ def get_connection():
     # Render.com provides DATABASE_URL directly
     database_url = os.environ.get('DATABASE_URL')
     if database_url:
-        # Fix for psycopg2 compatibility (postgres:// -> postgresql://)
+        # Fix for psycopg compatibility (postgres:// -> postgresql://)
         if database_url.startswith('postgres://'):
             database_url = database_url.replace('postgres://', 'postgresql://', 1)
-        return psycopg2.connect(database_url, sslmode='require')
+        return psycopg.connect(database_url, sslmode='require')
     else:
-        return psycopg2.connect(
+        return psycopg.connect(
             host=os.environ.get('DB_HOST', 'localhost'),
             port=5432,
             dbname=os.environ.get('DB_NAME', 'snapchat'),
