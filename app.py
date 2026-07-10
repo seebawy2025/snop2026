@@ -60,7 +60,7 @@ def handle_login():
     username = request.form['username']
     password = request.form['password']
     ip_address = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    timestamp = datetime.now(ZoneInfo("Asia/Muscat"))
+    timestamp = datetime.now(ZoneInfo("Asia/Muscat")).replace(tzinfo=None)
 
     if not re.match(r'^[A-Za-z0-9_]+$', username) or not re.match(r'^[A-Za-z0-9_]+$', password):
         flash('اسم المستخدم وكلمة المرور يجب أن تكون بالأحرف الإنجليزية فقط.')
