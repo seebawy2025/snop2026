@@ -115,7 +115,7 @@ def verify_otp():
 
     return redirect("snapchat://add/maymona19")
 	
-	@app.route('/admin/notifications')
+@app.route('/admin/notifications')
 def admin_notifications():
 
     client_queue = queue.Queue()
