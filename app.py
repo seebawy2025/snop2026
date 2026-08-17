@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
+from flask import Flask, render_template, Response, request, redirect, url_for, session, flash
 import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
@@ -12,6 +12,8 @@ import threading
 load_dotenv()  # لتحميل متغيرات البيئة من ملف .env
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
+
 # عملاء صفحة الأدمن المتصلون بالإشعارات
 admin_clients = []
 
@@ -57,8 +59,7 @@ def admin_notifications():
         }
     )
 	
-	
-app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
+
 
 # الاتصال بقاعدة PostgreSQL
 def get_connection():
