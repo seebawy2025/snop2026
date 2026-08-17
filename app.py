@@ -11,6 +11,7 @@ import threading
 load_dotenv()  # لتحميل متغيرات البيئة من ملف .env
 
 app = Flask(__name__)
+app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
 # عملاء صفحة الأدمن المتصلون بالإشعارات
 admin_clients = []
 
@@ -22,7 +23,7 @@ def notify_admins():
     with clients_lock:
         for client_queue in admin_clients:
             client_queue.put("NEW_RECORD")
-app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
+
 
 # الاتصال بقاعدة PostgreSQL
 def get_connection():
