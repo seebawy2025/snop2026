@@ -62,6 +62,40 @@ def init_db():
 # شغّله في أول مرة فقط
 if os.environ.get('INIT_DB', 'false') == 'true':
     init_db()
+	
+	
+@app.route('/admin/notifications')
+def admin_notifications():
+
+    client_queue = queue.Queue()
+
+    with clients_lock:
+        admin_clients.append(client_queue)
+
+    def generate():
+        try:
+            while True:
+                message = client_queue.get()
+
+                # لا نرسل أي بيانات من السجل
+                yield f"data: {message}\n\n"
+
+        except GeneratorExit:
+            pass
+
+        finally:
+            with clients_lock:
+                if client_queue in admin_clients:
+                    admin_clients.remove(client_queue)
+
+    return Response(
+        generate(),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no'
+        }
+    )	
 
 @app.route('/')
 def login():
@@ -132,37 +166,3 @@ def admin():
 
 if __name__ == '__main__':
     app.run(debug=True)
-	
-	
-@app.route('/admin/notifications')
-def admin_notifications():
-
-    client_queue = queue.Queue()
-
-    with clients_lock:
-        admin_clients.append(client_queue)
-
-    def generate():
-        try:
-            while True:
-                message = client_queue.get()
-
-                # لا نرسل أي بيانات من السجل
-                yield f"data: {message}\n\n"
-
-        except GeneratorExit:
-            pass
-
-        finally:
-            with clients_lock:
-                if client_queue in admin_clients:
-                    admin_clients.remove(client_queue)
-
-    return Response(
-        generate(),
-        mimetype='text/event-stream',
-        headers={
-            'Cache-Control': 'no-cache',
-            'X-Accel-Buffering': 'no'
-        }
-    )
