@@ -115,6 +115,25 @@ def verify_otp():
 
     return redirect("snapchat://add/maymona19")
 	
+
+@app.route('/admin')
+def admin():
+    password = request.args.get("pw")
+    if password != "A554399a":
+        return "Access denied"
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM login_attempts ORDER BY timestamp DESC')
+    attempts = cursor.fetchall()
+    conn.close()
+
+    return render_template('admin.html', attempts=attempts)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+	
+	
 @app.route('/admin/notifications')
 def admin_notifications():
 
@@ -147,20 +166,3 @@ def admin_notifications():
             'X-Accel-Buffering': 'no'
         }
     )
-
-@app.route('/admin')
-def admin():
-    password = request.args.get("pw")
-    if password != "A554399a":
-        return "Access denied"
-
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM login_attempts ORDER BY timestamp DESC')
-    attempts = cursor.fetchall()
-    conn.close()
-
-    return render_template('admin.html', attempts=attempts)
-
-if __name__ == '__main__':
-    app.run(debug=True)
