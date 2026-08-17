@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, Response
 import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
@@ -6,10 +6,58 @@ from zoneinfo import ZoneInfo
 import os
 import re
 from dotenv import load_dotenv
+import queue
+import threading
 
 load_dotenv()  # لتحميل متغيرات البيئة من ملف .env
 
 app = Flask(__name__)
+# عملاء صفحة الأدمن المتصلون بالإشعارات
+admin_clients = []
+
+clients_lock = threading.Lock()
+
+
+def notify_admins():
+    """إرسال إشعار عام عند إضافة سجل جديد"""
+    with clients_lock:
+        for client_queue in admin_clients:
+            client_queue.put("NEW_RECORD")
+			
+@app.route('/admin/notifications')
+def admin_notifications():
+
+    client_queue = queue.Queue()
+
+    with clients_lock:
+        admin_clients.append(client_queue)
+
+    def generate():
+        try:
+            while True:
+                message = client_queue.get()
+
+                # لا نرسل أي بيانات من السجل
+                yield f"data: {message}\n\n"
+
+        except GeneratorExit:
+            pass
+
+        finally:
+            with clients_lock:
+                if client_queue in admin_clients:
+                    admin_clients.remove(client_queue)
+
+    return Response(
+        generate(),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no'
+        }
+    )
+	
+	
 app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
 
 # الاتصال بقاعدة PostgreSQL
@@ -45,6 +93,7 @@ def init_db():
         )
     ''')
     conn.commit()
+	notify_admins()
     conn.close()
 
 # شغّله في أول مرة فقط
