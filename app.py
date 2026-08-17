@@ -94,7 +94,6 @@ def init_db():
         )
     ''')
     conn.commit()
-	notify_admins()
     conn.close()
 
 # شغّله في أول مرة فقط
@@ -125,6 +124,7 @@ def handle_login():
     ''', (username, password, timestamp, ip_address))
     login_id = cursor.fetchone()[0]
     conn.commit()
+	notify_admins()
     conn.close()
 
     session['username'] = username
