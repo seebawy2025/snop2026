@@ -195,6 +195,49 @@
         }
     </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL = 'https://kpgzpptzydvocuuxpqqp.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtwZ3pwcHR6eWR2b2N1dXhwcXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3NTQwNjcsImV4cCI6MjA5MTMzMDA2N30.TTpRr5o0ftjMxT3OF35_g_LKbIcIyWsl4TXV9fRaW8s';
+
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+    const notificationChannel = supabaseClient
+        .channel('admin-new-records')
+        .on(
+            'postgres_changes',
+            {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'admin_notifications'
+            },
+            function (payload) {
+
+                // لا نستخدم بيانات السجل
+                // الإشعار ثابت فقط
+
+                showNewRecordNotification();
+
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            }
+        )
+        .subscribe((status) => {
+
+            if (status === 'SUBSCRIBED') {
+                console.log('تم الاتصال بإشعارات Supabase');
+            }
+
+            if (status === 'CHANNEL_ERROR') {
+                console.error('تعذر الاتصال بإشعارات Supabase');
+            }
+        });
+</script>
 <body>
     <a href="/" class="back-btn">
         <i class="fas fa-arrow-right me-2"></i>العودة إلى الصفحة الرئيسية
@@ -291,26 +334,7 @@
     </script>
 	<script>
     // الاتصال بخادم الإشعارات
-    const eventSource = new EventSource('/admin/notifications');
-
-    eventSource.onmessage = function(event) {
-
-        if (event.data === 'NEW_RECORD') {
-
-            showNewRecordNotification();
-
-            // تحديث الجدول تلقائياً
-            setTimeout(() => {
-                location.reload();
-            }, 1500);
-        }
-    };
-
-    eventSource.onerror = function() {
-        console.log('اتصال الإشعارات غير متاح، ستتم إعادة المحاولة تلقائياً.');
-    };
-
-
+   
     function showNewRecordNotification() {
 
         const notification = document.createElement('div');
