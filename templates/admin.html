@@ -238,79 +238,184 @@
             }
         });
 </script>
+<button
+    id="enablePushBtn"
+    type="button"
+    class="btn btn-warning">
+    <i class="fas fa-bell"></i>
+    تفعيل إشعارات الهاتف
+</button>
+
 <script>
+const VAPID_PUBLIC_KEY = "BNlwbkyb57bzGDRkf3EDZosklaYLsRcjKeEXslGtWi61XBDI1mohSHOjqyzn0kgNBi7sT_sBmR5uD51M5IKEUFE";
+
 async function enablePushNotifications() {
 
-    if (!("serviceWorker" in navigator)) {
-        alert("المتصفح لا يدعم Service Worker");
-        return;
-    }
+    console.log("1. بدأ تشغيل الإشعارات");
 
-    if (!("PushManager" in window)) {
-        alert("المتصفح لا يدعم Push Notifications");
-        return;
-    }
+    try {
 
-    if (!window.isSecureContext) {
-        alert("يجب فتح الموقع باستخدام HTTPS");
-        return;
-    }
+        // التحقق من دعم المتصفح
+        if (!("serviceWorker" in navigator)) {
+            alert("هذا المتصفح لا يدعم Service Worker");
+            return;
+        }
 
-    const permission = await Notification.requestPermission();
+        console.log("2. Service Worker مدعوم");
 
-    if (permission !== "granted") {
-        alert("لم يتم السماح بالإشعارات");
-        return;
-    }
+        if (!("PushManager" in window)) {
+            alert("هذا المتصفح لا يدعم Push Notifications");
+            return;
+        }
 
-    const registration =
-        await navigator.serviceWorker.register("/sw.js");
+        console.log("3. Push API مدعوم");
 
-    const existingSubscription =
-        await registration.pushManager.getSubscription();
+        if (!("Notification" in window)) {
+            alert("هذا المتصفح لا يدعم Notifications");
+            return;
+        }
 
-    let subscription = existingSubscription;
+        console.log("4. Notifications مدعومة");
 
-    if (!subscription) {
+        // يجب أن يكون الموقع HTTPS
+        if (!window.isSecureContext) {
+            alert("يجب فتح الموقع باستخدام HTTPS");
+            return;
+        }
 
-        subscription =
-            await registration.pushManager.subscribe({
+        console.log("5. HTTPS صحيح");
 
-                userVisibleOnly: true,
+        // طلب إذن الإشعارات
+        const permission =
+            await Notification.requestPermission();
 
-                applicationServerKey:
-                    urlBase64ToUint8Array(
-                        "BNlwbkyb57bzGDRkf3EDZosklaYLsRcjKeEXslGtWi61XBDI1mohSHOjqyzn0kgNBi7sT_sBmR5uD51M5IKEUFE"
-                    )
-            });
-    }
+        console.log(
+            "6. نتيجة صلاحية الإشعارات:",
+            permission
+        );
 
-    const subscriptionJSON =
-        subscription.toJSON();
+        if (permission !== "granted") {
 
-    const { error } =
-        await supabaseClient
-            .from("push_subscriptions")
-            .upsert(
-                {
-                    endpoint: subscriptionJSON.endpoint,
-                    p256dh:
-                        subscriptionJSON.keys.p256dh,
-                    auth:
-                        subscriptionJSON.keys.auth
-                },
-                {
-                    onConflict: "endpoint"
-                }
+            alert(
+                "لم يتم السماح بالإشعارات.\n\n" +
+                "حالة الإذن: " + permission
             );
 
-    if (error) {
-        console.error(error);
-        alert("حدث خطأ أثناء تسجيل الهاتف");
-        return;
-    }
+            return;
+        }
 
-    alert("تم تفعيل إشعارات الهاتف بنجاح.");
+        // تسجيل Service Worker
+        console.log("7. تسجيل sw.js");
+
+        const registration =
+            await navigator.serviceWorker.register("/sw.js");
+
+        console.log(
+            "8. تم تسجيل Service Worker:",
+            registration
+        );
+
+        // الحصول على الاشتراك الحالي
+        let subscription =
+            await registration.pushManager.getSubscription();
+
+        console.log(
+            "9. الاشتراك الحالي:",
+            subscription
+        );
+
+        // إنشاء اشتراك جديد
+        if (!subscription) {
+
+            console.log(
+                "10. إنشاء Push Subscription"
+            );
+
+            subscription =
+                await registration.pushManager.subscribe({
+
+                    userVisibleOnly: true,
+
+                    applicationServerKey:
+                        urlBase64ToUint8Array(
+                            VAPID_PUBLIC_KEY
+                        )
+                });
+
+            console.log(
+                "11. تم إنشاء الاشتراك:",
+                subscription
+            );
+        }
+
+        const subscriptionJSON =
+            subscription.toJSON();
+
+        console.log(
+            "12. بيانات الاشتراك:",
+            subscriptionJSON
+        );
+
+        // التأكد من Supabase
+        if (!supabaseClient) {
+
+            throw new Error(
+                "supabaseClient غير معرف"
+            );
+        }
+
+        console.log(
+            "13. الاتصال بـ Supabase"
+        );
+
+        const { error } =
+            await supabaseClient
+                .from("push_subscriptions")
+                .upsert(
+                    {
+                        endpoint:
+                            subscriptionJSON.endpoint,
+
+                        p256dh:
+                            subscriptionJSON.keys.p256dh,
+
+                        auth:
+                            subscriptionJSON.keys.auth
+                    },
+                    {
+                        onConflict: "endpoint"
+                    }
+                );
+
+        if (error) {
+            console.error(
+                "خطأ Supabase:",
+                error
+            );
+
+            throw error;
+        }
+
+        console.log(
+            "14. تم حفظ الاشتراك في Supabase"
+        );
+
+        alert(
+            "✅ تم تفعيل إشعارات الهاتف بنجاح"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ خطأ في تفعيل الإشعارات:",
+            error
+        );
+
+        alert(
+            "❌ حدث خطأ:\n\n" +
+            (error.message || error)
+        );
+    }
 }
 
 
@@ -343,6 +448,10 @@ document
         "click",
         enablePushNotifications
     );
+
+console.log(
+    "15. تم ربط زر الإشعارات"
+);
 </script>
 <body>
     <a href="/" class="back-btn">
@@ -350,13 +459,7 @@ document
     </a>
 	<br    />
 	<br    />
-    <button
-    id="enablePushBtn"
-    class="btn btn-warning"
-    type="button">
-    <i class="fas fa-bell"></i>
-    تفعيل إشعارات الهاتف
-</button>
+  
     <div class="container">
         <div class="admin-container">
             <div class="admin-header">
