@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, request, redirect, url_for, session, flash
+from flask import Flask, render_template, Response, request, redirect, url_for, session, flash, send_from_directory
 import psycopg
 from urllib.parse import urlparse
 from datetime import datetime
@@ -99,6 +99,15 @@ def init_db():
 # شغّله في أول مرة فقط
 if os.environ.get('INIT_DB', 'false') == 'true':
     init_db()
+	
+
+@app.route('/sw.js')
+def service_worker():
+    return send_from_directory(
+        app.template_folder,
+        'sw.js',
+        mimetype='application/javascript'
+    )	
 
 @app.route('/')
 def login():
